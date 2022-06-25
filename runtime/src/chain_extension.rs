@@ -8,8 +8,8 @@ use pallet_contracts::{
 	Config,
 };
 use sp_runtime::DispatchError;
-use webb_primitives::verifier::*;
 use sp_std::vec::Vec;
+use webb_primitives::verifier::*;
 
 /// Contract extension for `FetchRandom`
 pub struct VerifyProofExtension;
@@ -22,8 +22,6 @@ impl<C: Config> ChainExtension<C> for VerifyProofExtension {
 		match func_id {
 			1101 => {
 				let mut env = env.buf_in_buf_out();
-				env.read_into(&mut &mut*buf)?;
-				debug!(target: "runtime", "buffer is: {:?}", buf);
 				let address = env.ext().address(); // contract
 				debug!(target: "runtime", "contract address: {:?}", address);
 				let (public_inputs, proof_input): (Vec<u8>, Vec<u8>) =
