@@ -18,7 +18,7 @@ use sp_runtime::{
 	transaction_validity::{TransactionSource, TransactionValidity},
 	ApplyExtrinsicResult, MultiSignature,
 };
-use sp_std::prelude::*;
+use sp_std::{prelude::*, vec::Vec};
 #[cfg(feature = "std")]
 use sp_version::NativeVersion;
 use sp_version::RuntimeVersion;
@@ -292,6 +292,7 @@ impl pallet_verifier::Config<pallet_verifier::Instance1> for Runtime {
 	type Event = Event;
 	type ForceOrigin = frame_system::EnsureRoot<AccountId>;
 	type Verifier = ArkworksVerifierBn254;
+	type WeightInfo = ();
 }
 
 parameter_types! {
@@ -318,6 +319,7 @@ impl pallet_contracts::Config for Runtime {
 	type Currency = Balances;
 	type Event = Event;
 	type Call = Call;
+	type MaxStorageKeyLen = ();
 	/// The safest default is to allow no calls at all.
 	///
 	/// Runtimes should whitelist dispatchables that are allowed to be called from contracts
@@ -595,9 +597,9 @@ impl_runtime_apis! {
 
 		fn get_storage(
 			address: AccountId,
-			key: [u8; 32],
+			key: Vec<u8>,
 		) -> pallet_contracts_primitives::GetStorageResult {
-			Contracts::get_storage(address, key)
+			Contracts::get_storage(address, key.to_vec())
 		}
 	}
 
