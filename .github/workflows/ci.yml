@@ -13,7 +13,7 @@ jobs:
           - target: x86_64-unknown-linux-musl
             archive: tar.gz tar.xz
     steps:
-      - uses: actions/checkout@master
+      - uses: actions/checkout@v2.3.4
       - name: Compile and release
         uses: rust-build/rust-build.action@v1.3.2
         env:
