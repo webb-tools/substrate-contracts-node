@@ -40,13 +40,6 @@ use pallet_transaction_payment::CurrencyAdapter;
 #[cfg(any(feature = "std", test))]
 pub use sp_runtime::BuildStorage;
 pub use sp_runtime::{Perbill, Permill};
-/*use webb_primitives::{
-	field_ops::arkworks::ArkworksIntoFieldBn254,
-	hashing::{ethereum::Keccak256HasherBn254, ArkworksPoseidonHasherBn254},
-	types::ElementTrait,
-	verifying::ArkworksVerifierBn254,
-	Amount, ChainId,
-};*/
 use webb_primitives::verifying::ArkworksVerifierBn254;
 
 use codec::Encode;
