@@ -10,6 +10,31 @@ jobs:
     name: Build and Release
     runs-on: ubuntu-latest
     steps:
+      - name: Rust Cache
+        uses: Swatinem/rust-cache@v1.3.0
+
+      - name: Install cargo-nextest
+        uses: baptiste0928/cargo-install@v1
+        with:
+          crate: cargo-nextest
+          version: latest
+
+      - name: Install Toolchain
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          target: wasm32-unknown-unknown
+          override: true
+
+      - name: Install Dylint
+        run: cargo install dylint-link
+
+      - name: Install Cargo Dylint
+        run: cargo install cargo-dylint
+
+      - name: Install Toolchain Nightly
+        run: rustup toolchain install nightly
+
       - name: Checkout code
         uses: actions/checkout@v2
       - name: Build project
