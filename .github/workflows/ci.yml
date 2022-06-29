@@ -40,10 +40,10 @@ jobs:
       - name: Install Toolchain Nightly
         run: rustup toolchain install nightly
 
-      - name: RustUp Wasm Target
+      - name: RustUp
         run: rustup update
 
-      - name: RustUp Wasm Target
+      - name: RustUp Nightly
         run: rustup update nightly
 
       - name: RustUp Wasm Target
