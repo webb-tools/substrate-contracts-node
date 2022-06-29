@@ -275,7 +275,6 @@ parameter_types! {
 }
 
 impl pallet_transaction_payment::Config for Runtime {
-	type Event = Event;
 	type OnChargeTransaction = CurrencyAdapter<Balances, ()>;
 	type OperationalFeeMultiplier = OperationalFeeMultiplier;
 	type WeightToFee = IdentityFee<Balance>;
@@ -319,7 +318,6 @@ impl pallet_contracts::Config for Runtime {
 	type Currency = Balances;
 	type Event = Event;
 	type Call = Call;
-	type MaxStorageKeyLen = ();
 	/// The safest default is to allow no calls at all.
 	///
 	/// Runtimes should whitelist dispatchables that are allowed to be called from contracts
@@ -597,9 +595,9 @@ impl_runtime_apis! {
 
 		fn get_storage(
 			address: AccountId,
-			key: Vec<u8>,
+			key: [u8; 32],
 		) -> pallet_contracts_primitives::GetStorageResult {
-			Contracts::get_storage(address, key.to_vec())
+			Contracts::get_storage(address, key)
 		}
 	}
 
