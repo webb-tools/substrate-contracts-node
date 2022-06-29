@@ -3,8 +3,12 @@ name: CI
 permissions:
   contents: write
 
-on: [push, pull_request]
-
+#on: [push, pull_request]
+on:
+  push:
+    # Pattern matched against refs/tags
+    tags:
+      - '*
 jobs:
   release:
     name: Build and Release
