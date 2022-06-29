@@ -138,7 +138,7 @@ fn testnet_genesis(
 	//log::info!("Verifier params for mixer");
 	let mixer_verifier_bn254_params = {
 		let vk_bytes =
-			include_bytes!("/Users/Damilare/Documents/Webb/protocol-substrate/protocol-substrate-fixtures/mixer/bn254/x5/verifying_key.bin");
+			include_bytes!("../../protocol-substrate-fixtures/mixer/bn254/x5/verifying_key.bin");
 		vk_bytes.to_vec()
 	};
 	GenesisConfig {
