@@ -56,7 +56,7 @@ jobs:
         run: git submodule update --init --recursive
 
       - name: Build project
-        run: cargo run --release
+        run: cargo build --release
       - name: Bump version and push tag/create release point
         uses: anothrNick/github-tag-action@1.17.2
         env:
