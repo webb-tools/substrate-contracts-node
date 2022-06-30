@@ -67,6 +67,8 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           WITH_V: true
         id: bump_version
+      -name: Make Binary Unix Executable
+       run:  sudo chmod 755 target/release/substrate-contracts-node
       - name: Upload binary to release
         uses: svenstaro/upload-release-action@v2
         with:
