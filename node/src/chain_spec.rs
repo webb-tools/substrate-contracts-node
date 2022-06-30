@@ -130,12 +130,6 @@ fn testnet_genesis(
 	endowed_accounts: Vec<AccountId>,
 	_enable_println: bool,
 ) -> GenesisConfig {
-	/*let curve_bn254 = Curve::Bn254;
-
-	log::info!("Bn254 x5 w3 params");
-	let bn254_x5_3_params = setup_params::<ark_bn254::Fr>(curve_bn254, 5, 3);*/
-
-	//log::info!("Verifier params for mixer");
 	let mixer_verifier_bn254_params = {
 		let vk_bytes =
 			include_bytes!("../../protocol-substrate-fixtures/mixer/bn254/x5/verifying_key.bin");
