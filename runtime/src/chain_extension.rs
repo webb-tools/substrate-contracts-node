@@ -23,9 +23,13 @@ impl<C: Config> ChainExtension<C> for VerifyProofExtension {
 			1101 => {
 				let mut env = env.buf_in_buf_out();
 				let address = env.ext().address(); // contract
+				debug!(target: "runtime", "contract address: {:?}", address);
 				let (public_inputs, proof_input): (Vec<u8>, Vec<u8>) =
 					env.read_as_unbounded(env.in_len())?;
+				debug!(target: "runtime", "public input with len: {:?}", public_inputs);
+				debug!(target: "runtime", "proof input with len: {:?}", &proof_input);
 				let result = crate::MixerVerifierBn254::verify(&public_inputs, &proof_input);
+				debug!(target: "runtime", "result of verification is: {:?}", result.unwrap());
 				let result_slice = result.unwrap().encode();
 				trace!(
 					target: "runtime",
