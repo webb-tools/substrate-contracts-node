@@ -72,7 +72,7 @@ jobs:
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
           file: target/release/substrate-contracts-node
-          asset_name: mything
+          asset_name: substrate-contracts-node
           tag: ${{ github.ref }}
           overwrite: true
           body: "Webb Substrate contract Node release"
