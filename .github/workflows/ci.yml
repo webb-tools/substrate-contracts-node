@@ -3,51 +3,24 @@ name: CI
 permissions:
   contents: write
 
-#on: [push, pull_request]
 on:
   push:
     # Pattern matched against refs/tags
     tags:
       - '**'
+
 jobs:
-  release:
-    name: Build and Release for ${{ matrix.os }}
-    runs-on: ${{ matrix.os }}
-    strategy:
-      matrix:
-        name: [
-            linux,
-            windows,
-            macos
-        ]
-        include:
-          - name: linux
-            os: ubuntu-latest
-            artifact_name: target/release/<name>
-            asset_name: <name>-linux
-          - name: windows
-            os: windows-latest
-            artifact_name: target/release/<name>.exe
-            asset_name: <name>-windows
-          - name: macos
-            os: macos-latest
-            artifact_name: target/release/<name>
-            asset_name: <name>-macos
+  create-release:
+    runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-
-      - name: Set-Up
-        run: sudo apt install -y cmake pkg-config libssl-dev git build-essential clang libclang-dev curl
-
-      - name: Rust Cache
-        uses: Swatinem/rust-cache@v1.3.0
-
-      - name: Install cargo-nextest
-        uses: baptiste0928/cargo-install@v1
+      - uses: actions/checkout@v3
+      - uses: taiki-e/create-gh-release-action@v1
         with:
-          crate: cargo-nextest
-          version: latest
+          # (optional) Path to changelog.
+          changelog: CHANGELOG.md
+        env:
+          # (required) GitHub token for creating GitHub Releases.
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Install Toolchain
         uses: actions-rs/toolchain@v1
@@ -87,14 +60,14 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           WITH_V: true
         id: bump_version
-      #- name: Make Binary Unix Executable
-      #  run:  sudo chmod 755 target/release/substrate-contracts-node
+      - name: Make Binary Unix Executable
+        run:  sudo chmod 755 target/release/substrate-contracts-node
       - name: Upload binary to release
         uses: svenstaro/upload-release-action@v2
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
-          file: ${{ matrix.artifact_name }}
-          asset_name: ${{ matrix.asset_name }}
+          file: target/release/substrate-contracts-node
+          asset_name: substrate-contracts-node
           tag: ${{ github.ref }}
           overwrite: true
           body: "Webb Substrate contract Node release"
