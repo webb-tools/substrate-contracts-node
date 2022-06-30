@@ -3,24 +3,31 @@ name: CI
 permissions:
   contents: write
 
+#on: [push, pull_request]
 on:
   push:
     # Pattern matched against refs/tags
     tags:
       - '**'
-
 jobs:
-  create-release:
+  release:
+    name: Build and Release
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - uses: taiki-e/create-gh-release-action@v1
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set-Up
+        run: sudo apt install -y cmake pkg-config libssl-dev git build-essential clang libclang-dev curl
+
+      - name: Rust Cache
+        uses: Swatinem/rust-cache@v1.3.0
+
+      - name: Install cargo-nextest
+        uses: baptiste0928/cargo-install@v1
         with:
-          # (optional) Path to changelog.
-          changelog: CHANGELOG.md
-        env:
-          # (required) GitHub token for creating GitHub Releases.
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          crate: cargo-nextest
+          version: latest
 
       - name: Install Toolchain
         uses: actions-rs/toolchain@v1
