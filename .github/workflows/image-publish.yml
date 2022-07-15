@@ -11,6 +11,10 @@ jobs:
       contents: read
     steps:
       - uses: actions/checkout@v2
+
+      - name: Get Path To Substrate Contracts Node
+        run: readlink -f build-contract-node-docker.sh
+
       - name: Build Image
         run: bash /scripts/build-contract-node-docker.sh
       - name: Install docker-slim
