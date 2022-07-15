@@ -12,7 +12,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Build Image
-        run: sudo ./scripts/build-contract-node-docker.sh
+        run: bash /scripts/build-contract-node-docker.sh
       - name: Install docker-slim
         run: curl -sL https://raw.githubusercontent.com/docker-slim/docker-slim/master/scripts/install-dockerslim.sh | sudo -E bash -
       - name: Slim down the Image
