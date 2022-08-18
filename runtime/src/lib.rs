@@ -290,6 +290,13 @@ impl pallet_verifier::Config<pallet_verifier::Instance2> for Runtime {
 	type WeightInfo = pallet_verifier::weights::WebbWeight<Runtime>;
 }
 
+impl pallet_verifier::Config<pallet_verifier::Instance3> for Runtime {
+	type Event = Event;
+	type ForceOrigin = frame_system::EnsureRoot<AccountId>;
+	type Verifier = ArkworksVerifierBn254;
+	type WeightInfo = pallet_verifier::weights::WebbWeight<Runtime>;
+}
+
 parameter_types! {
 	pub const DepositPerItem: Balance = deposit(1, 0);
 	pub const DepositPerByte: Balance = deposit(0, 1);
@@ -365,6 +372,8 @@ construct_runtime!(
 		MixerVerifierBn254: pallet_verifier::<Instance1>::{Pallet, Call, Storage, Event<T>, Config<T>},
 		// VAnchor Verifier 2x2
 		VAnchorVerifier2x2Bn254: pallet_verifier::<Instance2>::{Pallet, Call, Storage, Event<T>, Config<T>},
+		// VAnchor Verifier 2x16
+		VAnchorVerifier2x16Bn254: pallet_verifier::<Instance3>::{Pallet, Call, Storage, Event<T>, Config<T>},
 
 
 	}

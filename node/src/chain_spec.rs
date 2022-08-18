@@ -1,6 +1,6 @@
 use contracts_node_runtime::{
 	AccountId, BalancesConfig, GenesisConfig, MixerVerifierBn254Config, Signature, SudoConfig,
-	SystemConfig, VAnchorVerifier2x2Bn254Config, WASM_BINARY,
+	SystemConfig, VAnchorVerifier2x16Bn254Config, VAnchorVerifier2x2Bn254Config, WASM_BINARY,
 };
 use sc_service::ChainType;
 use sp_core::{sr25519, Pair, Public};
@@ -142,6 +142,14 @@ fn testnet_genesis(
 		);
 		vk_bytes.to_vec()
 	};
+
+	let vanchor_verifier_bn254_2_16_params = {
+		let vk_bytes = include_bytes!(
+			"../../protocol-substrate-fixtures/vanchor/bn254/x5/2-16-2/verifying_key.bin"
+		);
+		vk_bytes.to_vec()
+	};
+
 	GenesisConfig {
 		system: SystemConfig {
 			// Add Wasm runtime to storage.
@@ -162,6 +170,10 @@ fn testnet_genesis(
 		},
 		v_anchor_verifier_2x_2_bn_254: VAnchorVerifier2x2Bn254Config {
 			parameters: Some(vanchor_verifier_bn254_params),
+			phantom: Default::default(),
+		},
+		v_anchor_verifier_2x_16_bn_254: VAnchorVerifier2x16Bn254Config {
+			parameters: Some(vanchor_verifier_bn254_2_16_params),
 			phantom: Default::default(),
 		},
 	}
