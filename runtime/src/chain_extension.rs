@@ -43,6 +43,8 @@ impl<C: Config> ChainExtension<C> for VerifyProofExtension {
 				let address = env.ext().address(); // contract
 				let (public_inputs, proof_input): (Vec<u8>, Vec<u8>) =
 					env.read_as_unbounded(env.in_len())?;
+				debug!(target: "runtime", "public inputs is: {:?}", public_inputs.clone());
+				debug!(target: "runtime", "proof input is: {:?}", proof_input.clone());
 				let result = crate::VAnchorVerifier2x2Bn254::verify(&public_inputs, &proof_input);
 				debug!(target: "runtime", "result of vanchor2x2 verification is: {:?}", result.unwrap());
 				let result_slice = result.unwrap().encode();
