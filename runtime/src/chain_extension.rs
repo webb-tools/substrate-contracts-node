@@ -26,15 +26,59 @@ impl<C: Config> ChainExtension<C> for VerifyProofExtension {
 				let (public_inputs, proof_input): (Vec<u8>, Vec<u8>) =
 					env.read_as_unbounded(env.in_len())?;
 				let result = crate::MixerVerifierBn254::verify(&public_inputs, &proof_input);
-				debug!(target: "runtime", "result of verification is: {:?}", result.unwrap());
+				debug!(target: "runtime", "result of mixer verification is: {:?}", result.unwrap());
 				let result_slice = result.unwrap().encode();
 				trace!(
 					target: "runtime",
 					"[ChainExtension]|call|func_id:{:}",
 					func_id
 				);
-				env.write(&result_slice, false, None)
-					.map_err(|_| DispatchError::Other("ChainExtension failed to call verify"))?;
+				env.write(&result_slice, false, None).map_err(|_| {
+					DispatchError::Other("ChainExtension failed to call verify for mixer")
+				})?;
+			},
+
+			1102 => {
+				let mut env = env.buf_in_buf_out();
+				let address = env.ext().address(); // contract
+				let (public_inputs, proof_input): (Vec<u8>, Vec<u8>) =
+					env.read_as_unbounded(env.in_len())?;
+				debug!(target: "runtime", "public inputs is: {:?}", public_inputs.clone());
+				debug!(target: "runtime", "proof input is: {:?}", proof_input.clone());
+				let result = crate::VAnchorVerifier2x2Bn254::verify(&public_inputs, &proof_input);
+				debug!(target: "runtime", "result of vanchor2x2 verification is: {:?}", result.unwrap());
+				let result_slice = result.unwrap().encode();
+				trace!(
+					target: "runtime",
+					"[ChainExtension]|call|func_id:{:}",
+					func_id
+				);
+				env.write(&result_slice, false, None).map_err(|_| {
+					DispatchError::Other("ChainExtension failed to call verify for vanchor2x2")
+				})?;
+			},
+
+			_ => {
+				error!("Called an unregistered `func_id`: {:}", func_id);
+				return Err(DispatchError::Other("Unimplemented func_id"))
+			},
+
+			1103 => {
+				let mut env = env.buf_in_buf_out();
+				let address = env.ext().address(); // contract
+				let (public_inputs, proof_input): (Vec<u8>, Vec<u8>) =
+					env.read_as_unbounded(env.in_len())?;
+				let result = crate::VAnchorVerifier2x2Bn254::verify(&public_inputs, &proof_input);
+				debug!(target: "runtime", "result of vanchor2x16 verification is: {:?}", result.unwrap());
+				let result_slice = result.unwrap().encode();
+				trace!(
+					target: "runtime",
+					"[ChainExtension]|call|func_id:{:}",
+					func_id
+				);
+				env.write(&result_slice, false, None).map_err(|_| {
+					DispatchError::Other("ChainExtension failed to call verify vanchor2x16")
+				})?;
 			},
 
 			_ => {

@@ -28,7 +28,7 @@ pub use frame_support::{
 	construct_runtime, parameter_types,
 	traits::{ConstU32, ConstU8, KeyOwnerProofSystem, Randomness, StorageInfo},
 	weights::{
-		constants::{BlockExecutionWeight, ExtrinsicBaseWeight, RocksDbWeight, WEIGHT_PER_SECOND},
+		constants::{BlockExecutionWeight, ExtrinsicBaseWeight, RocksDbWeight, WEIGHT_PER_SECOND, WEIGHT_PER_MILLIS},
 		IdentityFee, Weight,
 	},
 	StorageValue,
@@ -118,7 +118,7 @@ const NORMAL_DISPATCH_RATIO: Perbill = Perbill::from_percent(75);
 const AVERAGE_ON_INITIALIZE_RATIO: Perbill = Perbill::from_percent(10);
 
 /// We allow for 2 seconds of compute with a 6 second average block time.
-const MAXIMUM_BLOCK_WEIGHT: Weight = 9 * WEIGHT_PER_SECOND;
+const MAXIMUM_BLOCK_WEIGHT: Weight = 8 * WEIGHT_PER_SECOND;
 
 // Prints debug output of the `contracts` pallet to stdout if the node is
 // started with `-lruntime::contracts=debug`.
@@ -283,6 +283,20 @@ impl pallet_verifier::Config<pallet_verifier::Instance1> for Runtime {
 	type WeightInfo = ();
 }
 
+impl pallet_verifier::Config<pallet_verifier::Instance2> for Runtime {
+	type Event = Event;
+	type ForceOrigin = frame_system::EnsureRoot<AccountId>;
+	type Verifier = ArkworksVerifierBn254;
+	type WeightInfo = pallet_verifier::weights::WebbWeight<Runtime>;
+}
+
+impl pallet_verifier::Config<pallet_verifier::Instance3> for Runtime {
+	type Event = Event;
+	type ForceOrigin = frame_system::EnsureRoot<AccountId>;
+	type Verifier = ArkworksVerifierBn254;
+	type WeightInfo = pallet_verifier::weights::WebbWeight<Runtime>;
+}
+
 parameter_types! {
 	pub const DepositPerItem: Balance = deposit(1, 0);
 	pub const DepositPerByte: Balance = deposit(0, 1);
@@ -356,6 +370,11 @@ construct_runtime!(
 		Contracts: pallet_contracts,
 		// Mixer Verifier
 		MixerVerifierBn254: pallet_verifier::<Instance1>::{Pallet, Call, Storage, Event<T>, Config<T>},
+		// VAnchor Verifier 2x2
+		VAnchorVerifier2x2Bn254: pallet_verifier::<Instance2>::{Pallet, Call, Storage, Event<T>, Config<T>},
+		// VAnchor Verifier 2x16
+		VAnchorVerifier2x16Bn254: pallet_verifier::<Instance3>::{Pallet, Call, Storage, Event<T>, Config<T>},
+
 
 	}
 );
